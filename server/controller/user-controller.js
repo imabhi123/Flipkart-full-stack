@@ -1,6 +1,8 @@
 const User=require('../model/user-schema')
 const userSignup=async(req,res)=>{
 try {
+    const exist=await User.findOne({username:req.body.username});
+    if(exist)res.status(401).json({message:'username already exists'});
     const user=req.body;
     const newUser=new User(user);
     await newUser.save();

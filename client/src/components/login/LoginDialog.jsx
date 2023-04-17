@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Button,
@@ -7,6 +7,8 @@ import {
   Typography,
   styled,
 } from "@mui/material";
+
+import { DataContext } from "../../context/DataProvider";
 
 import { authenticateSignup } from "../../service/api";
 
@@ -75,40 +77,60 @@ const signupInitialValues = {
   phone: "",
 };
 
-const LoginDialog = ({ open, setOpen }) => {
-  const [flag, setFlag] = useState(true);
-  const [signup, setSignup] = useState(signupInitialValues);
-
-  const handleChange = (e) => {
-    setSignup({ ...signup, [e.target.name]: e.target.value });
-  };
-
-  const signupUser=async()=>{
-    let response=await authenticateSignup(signup);
+const accountInitialValues={
+  login:{
+    view:'login',
+    heading:'Login',
+    subHeading:'Get access to your Orders,WishList and recommendations'
+  },
+  signup:{
+    view:'signup',
+    heading:'looks like you are new here',
+    subHeading:'signup with your mobile no to get started'
   }
+}
+
+const LoginDialog = ({ open, setOpen }) => {
+  const [account,toggleAccount]=useState(accountInitialValues.login)
+  const [signup,setSignup]=useState(signupInitialValues);
+
+  const {setAccount}=useContext(DataContext)
+
+  const handleClose=()=>{
+    setOpen(false)
+    toggleAccount(accountInitialValues.login)
+  }
+
+const handleChange=(e)=>{
+setSignup({...signup,[e.target.name]:e.target.value})
+console.log(signup)
+}
+
+const signupUser=async()=>{
+  const response=await authenticateSignup(signup)
+  if(!response)return;
+  handleClose();
+  setAccount(signup.firstname);
+}
+
   return (
     <div>
       <Dialog
         open={open}
-        onClose={() => {
-          setOpen(false);
-          setFlag(true);
-        }}
+        onClose={handleClose}
         PaperProps={{ sx: { maxWidth: "unset" } }}
       >
         <Component>
           <Box style={{ display: "flex", height: "100%" }}>
             <Image>
               <Typography variant="h5" style={{ fontSize: "22px" }}>
-                {flag ? "Login" : "looks like you are new here"}
+                {account.heading}
               </Typography>
               <Typography style={{ marginTop: "20px", width: "100%" }}>
-                {flag
-                  ? "Get access to your orders,WishList and Recommendations"
-                  : "Signup with your mobile no to get started"}
+                {account.subHeading}
               </Typography>
             </Image>
-            {flag ? (
+            {account.view==='login'? (
               <Wrapper>
                 <TextField
                   variant="standard"
@@ -125,7 +147,7 @@ const LoginDialog = ({ open, setOpen }) => {
                 <LoginButton>Login</LoginButton>
                 <Typography style={{ textAlign: "center" }}>OR</Typography>
                 <RequestOtp>Request Otp</RequestOtp>
-                <CreateAccount onClick={() => setFlag(false)}>
+                <CreateAccount onClick={() => toggleAccount(accountInitialValues.signup)}>
                   New to flipkart? Create an Account
                 </CreateAccount>
               </Wrapper>
@@ -167,7 +189,7 @@ const LoginDialog = ({ open, setOpen }) => {
                   onChange={handleChange}
                   label="Enter Phone"
                 ></TextField>
-                <LoginButton onClick={signupUser} >Continue</LoginButton>
+                <LoginButton onClick={signupUser}>Continue</LoginButton>
               </Wrapper>
             )}
           </Box>
