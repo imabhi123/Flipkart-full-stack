@@ -10,7 +10,7 @@ const MainBox = styled(Box)`
   display: flex;
   height: 55px;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 15px;
   margin: 0 3% 0 auto;
   & > button,
   & > p {
@@ -29,12 +29,12 @@ const LoginButton = styled(Button)`
 `;
 const CustomButton = () => {
   const [open, setOpen] = useState(false);
-  const { account } = useContext(DataContext);
+  const { account,setAccount } = useContext(DataContext);
   console.log()
   return (
     <MainBox>
       {account ? (
-        <Profile account={account}/>
+        <Profile account={account} setAccount={setAccount}/>
       ) : (
         <LoginButton variant="contained" onClick={() => setOpen(true)}>
           Login

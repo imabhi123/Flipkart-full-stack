@@ -10,7 +10,7 @@ import {
 
 import { DataContext } from "../../context/DataProvider";
 
-import { authenticateSignup } from "../../service/api";
+import { authenticateSignup,authenticateLogin } from "../../service/api";
 
 const Component = styled(Box)`
   height: 70vh;
@@ -77,6 +77,11 @@ const signupInitialValues = {
   phone: "",
 };
 
+const loginInitialValues={
+  username:'',
+  password:'',
+}
+
 const accountInitialValues={
   login:{
     view:'login',
@@ -93,6 +98,8 @@ const accountInitialValues={
 const LoginDialog = ({ open, setOpen }) => {
   const [account,toggleAccount]=useState(accountInitialValues.login)
   const [signup,setSignup]=useState(signupInitialValues);
+
+  const [login,setLogin]=useState(loginInitialValues)
 
   const {setAccount}=useContext(DataContext)
 
@@ -111,6 +118,14 @@ const signupUser=async()=>{
   if(!response)return;
   handleClose();
   setAccount(signup.firstname);
+}
+
+const onValueChange=(e)=>{
+  setLogin({...login,[e.target.name]:e.target.value})
+}
+
+const loginUser=async()=>{
+  let response=await authenticateLogin(login);
 }
 
   return (
@@ -135,16 +150,20 @@ const signupUser=async()=>{
                 <TextField
                   variant="standard"
                   label="enter Email/Phone no."
+                  onChange={(e)=>onValueChange(e)}
+                  name='username'
                 ></TextField>
                 <TextField
                   variant="standard"
                   label="Enter password"
+                  onChange={(e)=>onValueChange(e)}
+                  name="password"
                 ></TextField>
                 <Text>
                   By continuing this, you agree to flipkart's terms and privacy
                   policy
                 </Text>
-                <LoginButton>Login</LoginButton>
+                <LoginButton onClick={loginUser}>Login</LoginButton>
                 <Typography style={{ textAlign: "center" }}>OR</Typography>
                 <RequestOtp>Request Otp</RequestOtp>
                 <CreateAccount onClick={() => toggleAccount(accountInitialValues.signup)}>
