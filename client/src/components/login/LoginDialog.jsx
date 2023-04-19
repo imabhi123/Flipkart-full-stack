@@ -10,7 +10,7 @@ import {
 
 import { DataContext } from "../../context/DataProvider";
 
-import { authenticateSignup,authenticateLogin } from "../../service/api";
+import { authenticateSignup, authenticateLogin } from "../../service/api";
 
 const Component = styled(Box)`
   height: 70vh;
@@ -68,6 +68,14 @@ const CreateAccount = styled(Typography)`
   cursor: pointer;
 `;
 
+const Error = styled(Typography)`
+  font-size: 10px;
+  color: #ff6161;
+  line-height: 0;
+  margin-top: 10px;
+  font-weight: 600px;
+`;
+
 const signupInitialValues = {
   firstname: "",
   lastname: "",
@@ -77,56 +85,63 @@ const signupInitialValues = {
   phone: "",
 };
 
-const loginInitialValues={
-  username:'',
-  password:'',
-}
+const loginInitialValues = {
+  username: "",
+  password: "",
+};
 
-const accountInitialValues={
-  login:{
-    view:'login',
-    heading:'Login',
-    subHeading:'Get access to your Orders,WishList and recommendations'
+const accountInitialValues = {
+  login: {
+    view: "login",
+    heading: "Login",
+    subHeading: "Get access to your Orders,WishList and recommendations",
   },
-  signup:{
-    view:'signup',
-    heading:'looks like you are new here',
-    subHeading:'signup with your mobile no to get started'
-  }
-}
+  signup: {
+    view: "signup",
+    heading: "looks like you are new here",
+    subHeading: "signup with your mobile no to get started",
+  },
+};
 
 const LoginDialog = ({ open, setOpen }) => {
-  const [account,toggleAccount]=useState(accountInitialValues.login)
-  const [signup,setSignup]=useState(signupInitialValues);
+  const [account, toggleAccount] = useState(accountInitialValues.login);
+  const [signup, setSignup] = useState(signupInitialValues);
+  const [login, setLogin] = useState(loginInitialValues);
+  const { setAccount } = useContext(DataContext);
+  const [error, setError] = useState(false);
 
-  const [login,setLogin]=useState(loginInitialValues)
+  const handleClose = () => {
+    setOpen(false);
+    toggleAccount(accountInitialValues.login);
+    setError(false);
+  };
 
-  const {setAccount}=useContext(DataContext)
+  const handleChange = (e) => {
+    setSignup({ ...signup, [e.target.name]: e.target.value });
+    console.log(signup);
+  };
 
-  const handleClose=()=>{
-    setOpen(false)
-    toggleAccount(accountInitialValues.login)
-  }
+  const signupUser = async () => {
+    const response = await authenticateSignup(signup);
+    if (!response) return;
+    handleClose();
+    setAccount(signup.firstname);
+  };
 
-const handleChange=(e)=>{
-setSignup({...signup,[e.target.name]:e.target.value})
-console.log(signup)
-}
+  const onValueChange = (e) => {
+    console.log(login);
+    setLogin({ ...login, [e.target.name]: e.target.value });
+  };
 
-const signupUser=async()=>{
-  const response=await authenticateSignup(signup)
-  if(!response)return;
-  handleClose();
-  setAccount(signup.firstname);
-}
-
-const onValueChange=(e)=>{
-  setLogin({...login,[e.target.name]:e.target.value})
-}
-
-const loginUser=async()=>{
-  let response=await authenticateLogin(login);
-}
+  const loginUser = async () => {
+    let response = await authenticateLogin(login);
+    if (!response) {
+      setError(true);
+      return;
+    }
+    handleClose();
+    setAccount(login.username);
+  };
 
   return (
     <div>
@@ -145,18 +160,19 @@ const loginUser=async()=>{
                 {account.subHeading}
               </Typography>
             </Image>
-            {account.view==='login'? (
+            {account.view === "login" ? (
               <Wrapper>
                 <TextField
                   variant="standard"
                   label="enter Email/Phone no."
-                  onChange={(e)=>onValueChange(e)}
-                  name='username'
+                  onChange={(e) => onValueChange(e)}
+                  name="username"
                 ></TextField>
+                {error && <Error>please enter valid username/password</Error>}
                 <TextField
                   variant="standard"
                   label="Enter password"
-                  onChange={(e)=>onValueChange(e)}
+                  onChange={(e) => onValueChange(e)}
                   name="password"
                 ></TextField>
                 <Text>
@@ -166,7 +182,9 @@ const loginUser=async()=>{
                 <LoginButton onClick={loginUser}>Login</LoginButton>
                 <Typography style={{ textAlign: "center" }}>OR</Typography>
                 <RequestOtp>Request Otp</RequestOtp>
-                <CreateAccount onClick={() => toggleAccount(accountInitialValues.signup)}>
+                <CreateAccount
+                  onClick={() => toggleAccount(accountInitialValues.signup)}
+                >
                   New to flipkart? Create an Account
                 </CreateAccount>
               </Wrapper>

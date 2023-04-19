@@ -10,8 +10,8 @@ const MainBox = styled(Box)`
   display: flex;
   height: 55px;
   align-items: center;
-  margin-left: 15px;
   margin: 0 3% 0 auto;
+  margin-left:70px;
   & > button,
   & > p {
     margin: 10px;
