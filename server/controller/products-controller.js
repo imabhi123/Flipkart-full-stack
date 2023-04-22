@@ -1,4 +1,4 @@
-const Products=require('../model/user-schema');
+const Products=require('../model/product-schema');
 
 const getProducts=async(req,res)=>{
     try {

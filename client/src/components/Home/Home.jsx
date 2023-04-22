@@ -11,7 +11,6 @@ const Component = styled(Box)`
 `;
 const Home = () => {
   const {products}=useSelector(state=>state.getProducts);
-  console.log(products)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProducts())
@@ -21,6 +20,14 @@ const Home = () => {
       <Navbar />
       <Component>
         <Banner />
+        <Slide products={products}title="Deal of the day" timer={true}/>
+        <Slide products={products}title="Discounts for you" timer={false}/>
+        <Slide products={products}title="Suggested items" timer={false}/>
+        <Slide products={products}title="Top Selections" timer={false}/>
+        <Slide products={products}title="Recommended items" timer={false}/>
+        <Slide products={products}title="Trending offers" timer={false}/>
+        <Slide products={products}title="Season's top picks" timer={false}/>
+        <Slide products={products}title="Top Deals On accessories" timer={false}/>
       </Component>
     </>
   );
