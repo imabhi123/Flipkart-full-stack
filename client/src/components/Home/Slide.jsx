@@ -58,7 +58,6 @@ margin-top:5px;
 const Slide = ({ products,title,timer }) => {
   const timerURL =
     "https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/timer_a73398.svg";
-  console.log(products);
   const renderer = ({ hours, minutes, seconds }) => {
     return (
       <Box variant="span">
