@@ -118,18 +118,16 @@ const LoginDialog = ({ open, setOpen }) => {
 
   const handleChange = (e) => {
     setSignup({ ...signup, [e.target.name]: e.target.value });
-    console.log(signup);
   };
 
   const signupUser = async () => {
     const response = await authenticateSignup(signup);
     if (!response) return;
     handleClose();
-    setAccount(signup.firstname);
+    setAccount(signup.username);
   };
 
   const onValueChange = (e) => {
-    console.log(login);
     setLogin({ ...login, [e.target.name]: e.target.value });
   };
 

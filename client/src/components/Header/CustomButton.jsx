@@ -5,22 +5,25 @@ import LoginDialog from "../login/LoginDialog";
 import { DataContext } from "../../context/DataProvider";
 import { useState } from "react";
 import Profile from "./Profile";
-const MainBox = styled(Box)`
-  padding-left: 18rem;
-  display: flex;
-  height: 55px;
-  align-items: center;
-  margin: 0 3% 0 auto;
-  margin-left:70px;
-  & > button,
-  & > p {
-    margin: 10px;
-    align-items: center;
-  }
-`;
-const Container = styled(Box)`
-  display: flex;
-`;
+const MainBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  margin: "0 3% 0 auto",
+  alignItems: "center",
+  "& > *": {
+    marginRight: "40px !important",
+    fontSize: "16px",
+    alignItems: "center",
+  },
+  [theme.breakpoints.down("md")]: {
+    display: "block",
+  },
+}));
+const Container = styled(Box)(({ theme }) => ({
+  display: "flex",
+  [theme.breakpoints.down("md")]: {
+    display: "block",
+  },
+}));
 const LoginButton = styled(Button)`
   color: #2874f0;
   background-color: #fff;
@@ -29,12 +32,12 @@ const LoginButton = styled(Button)`
 `;
 const CustomButton = () => {
   const [open, setOpen] = useState(false);
-  const { account,setAccount } = useContext(DataContext);
-  console.log()
+  const { account, setAccount } = useContext(DataContext);
+  console.log();
   return (
     <MainBox>
       {account ? (
-        <Profile account={account} setAccount={setAccount}/>
+        <Profile account={account} setAccount={setAccount} />
       ) : (
         <LoginButton variant="contained" onClick={() => setOpen(true)}>
           Login

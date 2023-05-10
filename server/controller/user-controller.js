@@ -2,6 +2,7 @@ const User=require('../model/user-schema')
 const userSignup=async(req,res)=>{
 try {
     const exist=await User.findOne({username:req.body.username});
+    if(req.body.phone.length>10)res.status(401).json({message:'please enter a valid phone no.'});
     if(exist)res.status(401).json({message:'username already exists'});
     const user=req.body;
     const newUser=new User(user);

@@ -24,11 +24,7 @@ const StyledButton = styled(Button)(({theme})=>({
   [theme.breakpoints.down('sm')]:{
     width:'48%'
   }
-}))`
-  width: 48%;
-  height: 50px;
-  border-radius: 2px;
-`;
+}))
 
 const ActionItem = ({ product }) => {
   return (
