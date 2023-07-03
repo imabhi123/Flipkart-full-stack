@@ -1,1 +1,1 @@
-{"name":"Local: this","url":"d:\\flip-kart\\this.cpp","tests":[{"id":1682332707773,"input":"","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\flip-kart\\this.cpp","group":"local","local":true}
+{"name":"Local: this","url":"d:\\flip-kart\\this.cpp","tests":[{"id":1682332707773,"input":"are\ndenim","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\flip-kart\\this.cpp","group":"local","local":true}
